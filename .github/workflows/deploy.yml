@@ -9,11 +9,14 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   DOTNET_VERSION: '10.0.x'
   SOLUTION_PATH: './cricket-score-api.slnx'
   API_PROJECT_PATH: './CricketScore.API/CricketScore.API.csproj'
-  PUBLISH_OUTPUT: './publish'
+  PUBLISH_OUTPUT: '${{ github.workspace }}/publish'
 
 jobs:
   build:
@@ -24,29 +27,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-      - name: Build solution
+      - name: Build
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
 
-      - name: Run tests
+      - name: Test
         run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --verbosity normal
-        continue-on-error: false
 
-      - name: Publish API
-        run: |
-          dotnet publish ${{ env.API_PROJECT_PATH }} \
-            --configuration Release \
-            --no-build \
-            --output ${{ env.PUBLISH_OUTPUT }}
+      - name: Publish
+        run: dotnet publish ${{ env.API_PROJECT_PATH }} --configuration Release --no-build --output ${{ env.PUBLISH_OUTPUT }}
 
-      - name: Upload artifact for deployment
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: cricket-score-api
@@ -71,12 +77,17 @@ jobs:
           path: ${{ env.PUBLISH_OUTPUT }}
 
       - name: Login to Azure
-        run: az login --use-device-code
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure App Service
         id: deploy
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.PUBLISH_OUTPUT }}
+
+      - name: Azure logout
+        if: always()
+        run: az logout
