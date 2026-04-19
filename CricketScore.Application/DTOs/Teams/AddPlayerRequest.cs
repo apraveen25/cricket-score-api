@@ -1,10 +1,7 @@
-using CricketScore.Domain.Enums;
-
 namespace CricketScore.Application.DTOs.Teams;
 
 public record AddPlayerRequest(
-    string Name,
-    PlayerRole Role,
+    string PlayerId,
     bool IsCaptain = false,
     bool IsWicketKeeper = false
 );

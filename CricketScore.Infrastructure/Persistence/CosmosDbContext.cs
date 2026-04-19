@@ -19,6 +19,7 @@ public class CosmosDbContext
     public Container Matches => _client.GetContainer(_settings.DatabaseName, _settings.MatchesContainer);
     public Container Innings => _client.GetContainer(_settings.DatabaseName, _settings.InningsContainer);
     public Container Deliveries => _client.GetContainer(_settings.DatabaseName, _settings.DeliveriesContainer);
+    public Container Players => _client.GetContainer(_settings.DatabaseName, _settings.PlayersContainer);
 
     public async Task InitializeAsync()
     {
@@ -29,5 +30,6 @@ public class CosmosDbContext
         await db.Database.CreateContainerIfNotExistsAsync(_settings.MatchesContainer, "/id");
         await db.Database.CreateContainerIfNotExistsAsync(_settings.InningsContainer, "/matchId");
         await db.Database.CreateContainerIfNotExistsAsync(_settings.DeliveriesContainer, "/inningsId");
+        await db.Database.CreateContainerIfNotExistsAsync(_settings.PlayersContainer, "/id");
     }
 }

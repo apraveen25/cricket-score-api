@@ -9,4 +9,5 @@ public class CosmosDbSettings
     public string MatchesContainer { get; set; } = "matches";
     public string InningsContainer { get; set; } = "innings";
     public string DeliveriesContainer { get; set; } = "deliveries";
+    public string PlayersContainer { get; set; } = "players";
 }

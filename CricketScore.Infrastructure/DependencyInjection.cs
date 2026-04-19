@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IMatchRepository, MatchRepository>();
         services.AddScoped<IInningsRepository, InningsRepository>();
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+        services.AddScoped<IPlayerRepository, PlayerRepository>();
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddSingleton<INotificationService, ServiceBusPublisher>();

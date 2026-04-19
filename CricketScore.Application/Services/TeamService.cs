@@ -5,7 +5,7 @@ using CricketScore.Domain.Interfaces.Repositories;
 
 namespace CricketScore.Application.Services;
 
-public class TeamService(ITeamRepository teamRepository, IMapper mapper)
+public class TeamService(ITeamRepository teamRepository, IPlayerRepository playerRepository, IMapper mapper)
 {
     public async Task<TeamResponse> CreateTeamAsync(CreateTeamRequest request, string userId)
     {
@@ -38,16 +38,22 @@ public class TeamService(ITeamRepository teamRepository, IMapper mapper)
         if (team.Players.Count >= 15)
             throw new InvalidOperationException("Team cannot have more than 15 players.");
 
-        var player = new TeamPlayer
+        if (team.Players.Any(p => p.PlayerId == request.PlayerId))
+            throw new InvalidOperationException("Player is already in this team.");
+
+        var player = await playerRepository.GetByIdAsync(request.PlayerId)
+            ?? throw new KeyNotFoundException($"Player {request.PlayerId} not found.");
+
+        var teamPlayer = new TeamPlayer
         {
-            PlayerId = Guid.NewGuid().ToString(),
-            Name = request.Name,
-            Role = request.Role,
+            PlayerId = player.Id,
+            Name = player.Name,
+            Role = player.Role,
             IsCaptain = request.IsCaptain,
             IsWicketKeeper = request.IsWicketKeeper
         };
 
-        team.Players.Add(player);
+        team.Players.Add(teamPlayer);
         var updated = await teamRepository.UpdateAsync(team);
         return mapper.Map<TeamResponse>(updated);
     }

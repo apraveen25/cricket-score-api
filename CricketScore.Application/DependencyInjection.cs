@@ -1,5 +1,6 @@
 using CricketScore.Application.DTOs.Auth;
 using CricketScore.Application.DTOs.Matches;
+using CricketScore.Application.DTOs.Players;
 using CricketScore.Application.DTOs.Scoring;
 using CricketScore.Application.Mappings;
 using CricketScore.Application.Services;
@@ -19,10 +20,12 @@ public static class DependencyInjection
         services.AddScoped<TeamService>();
         services.AddScoped<MatchService>();
         services.AddScoped<ScoringService>();
+        services.AddScoped<PlayerService>();
 
         services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
         services.AddScoped<IValidator<CreateMatchRequest>, CreateMatchRequestValidator>();
         services.AddScoped<IValidator<BallDeliveryRequest>, BallDeliveryRequestValidator>();
+        services.AddScoped<IValidator<CreatePlayerRequest>, CreatePlayerRequestValidator>();
 
         return services;
     }
