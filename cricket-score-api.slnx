@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CricketScore.API/CricketScore.API.csproj" />
+  <Project Path="CricketScore.Domain/CricketScore.Domain.csproj" />
+  <Project Path="CricketScore.Application/CricketScore.Application.csproj" />
+  <Project Path="CricketScore.Infrastructure/CricketScore.Infrastructure.csproj" />
+</Solution>

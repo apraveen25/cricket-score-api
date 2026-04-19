@@ -1,0 +1,276 @@
+You are a Senior .NET Solution Architect and Backend Engineer.
+
+Your task is to design and generate a **production-ready ASP.NET Core Web API** for a **Cricket Scoring Application**, inspired by platforms like CricHeroes.
+
+---
+
+# 🏏 APPLICATION OVERVIEW
+
+We are building a modern Cricket Scoring platform where users can:
+
+* Register & Login
+* Create and manage Teams
+* Create Matches (local or tournament)
+* Perform **ball-by-ball live scoring**
+* View real-time scorecards and statistics
+* Receive alerts/notifications
+* Track player and team performance
+
+The system should support **scalable, real-time, cloud-native architecture** and be deployable to **Microsoft Azure**.
+
+---
+
+# 🎯 CORE FEATURES (MVP + EXTENDED)
+
+## 1. Authentication & Users
+
+* User Registration (Email/Phone)
+* Login with JWT Authentication
+* Role-based access (Admin, Scorer, Player, Viewer)
+* User Profile (stats, matches played, achievements)
+
+---
+
+## 2. Team Management
+
+* Create Team
+* Add/Remove Players
+* Assign roles (Captain, Wicketkeeper)
+* Team statistics
+
+---
+
+## 3. Match Management
+
+* Create Match (T20, ODI, Test, custom)
+* Select Teams
+* Define Playing XI
+* Toss (with decision)
+* Match status (Scheduled, Live, Completed)
+
+---
+
+## 4. Live Scoring Engine (MOST IMPORTANT)
+
+Design a **robust ball-by-ball scoring system**:
+
+Each delivery should capture:
+
+* Over, Ball number
+* Batsman, Bowler
+* Runs scored
+* Extras (Wide, No Ball, Bye, Leg Bye)
+* Wicket details (type, fielder)
+* Strike rotation
+
+Derived calculations:
+
+* Total score
+* Run rate
+* Required run rate
+* Fall of wickets
+
+---
+
+## 5. Scorecard & Analytics
+
+* Full Scorecard (Batting, Bowling)
+* Over-wise summary
+* Partnerships
+* Basic analytics:
+
+  * Run rate graph
+  * Top performers
+  * MVP calculation
+
+---
+
+## 6. Tournament / League (Optional but preferred)
+
+* Create Tournament
+* Points Table
+* Match scheduling
+* Leaderboards
+
+---
+
+## 7. Notifications & Alerts
+
+* Match start alerts
+* Wicket/Boundary notifications
+* Match result notifications
+
+---
+
+## 8. Search & Discovery
+
+* Search players, teams, matches
+* Filter by location/date
+
+---
+
+# 🧱 TECHNICAL REQUIREMENTS
+
+## Backend
+
+* ASP.NET Core 8 Web API
+* Clean Architecture (Layered or Hexagonal)
+* SOLID Principles
+* Repository + Unit of Work (optional if using EF Core properly)
+* DTO pattern with AutoMapper
+* FluentValidation
+
+---
+
+## Database
+
+* Use **Azure Cosmos DB (preferred)** or SQL Server
+* Design schema for:
+
+  * Users
+  * Teams
+  * Players
+  * Matches
+  * Innings
+  * Deliveries (IMPORTANT: optimized for high write throughput)
+
+---
+
+## Real-Time Updates
+
+* Use **SignalR** for live score updates
+
+---
+
+## Messaging (Optional but ideal)
+
+* Azure Service Bus for:
+
+  * Notifications
+  * Match events
+
+---
+
+## Caching
+
+* Redis for frequently accessed scorecards
+
+---
+
+## API Design
+
+* RESTful APIs
+* Proper versioning (/api/v1/)
+* Swagger/OpenAPI documentation
+* Pagination, filtering, sorting
+
+---
+
+## Security
+
+* JWT Authentication
+* Role-based Authorization
+* Input validation & sanitization
+
+---
+
+## Observability
+
+* Logging with Serilog
+* Application Insights integration
+
+---
+
+# ☁️ AZURE DEPLOYMENT
+
+Design the solution for Azure:
+
+* Azure App Service (API hosting)
+* Azure Cosmos DB
+* Azure SignalR Service
+* Azure Service Bus
+* Azure Redis Cache
+* Azure Key Vault (secrets)
+
+Include:
+
+* appsettings structure
+* environment-based configs
+
+---
+
+# 📂 PROJECT STRUCTURE
+
+Generate a clean folder structure:
+
+* API Layer
+* Application Layer
+* Domain Layer
+* Infrastructure Layer
+
+---
+
+# 📡 IMPORTANT APIs TO IMPLEMENT
+
+## Auth
+
+* POST /auth/register
+* POST /auth/login
+
+## Teams
+
+* POST /teams
+* GET /teams/{id}
+
+## Matches
+
+* POST /matches
+* GET /matches/{id}
+* POST /matches/{id}/start
+
+## Scoring
+
+* POST /matches/{id}/ball
+* GET /matches/{id}/scorecard
+
+---
+
+# ⚡ ADVANCED DESIGN EXPECTATIONS
+
+* Design scoring system for **high-frequency writes**
+* Ensure idempotency for scoring APIs
+* Handle concurrency (multiple scorers)
+* Use event-driven approach for match updates
+* Consider partitioning strategy in Cosmos DB
+
+---
+
+# 📌 OUTPUT FORMAT
+
+Provide:
+
+1. High-level Architecture Diagram (text explanation)
+2. Database schema design
+3. Folder structure
+4. Sample Models (User, Match, Delivery, Scorecard)
+5. Key API Controllers
+6. Example of Live Scoring logic
+7. Azure deployment explanation
+8. Best practices & scaling strategy
+
+---
+
+# 🚀 GOAL
+
+The output should be:
+
+* Production-ready
+* Scalable to millions of matches
+* Clean and maintainable
+* Ready for frontend/mobile integration
+
+---
+
+Take inspiration from modern cricket scoring platforms but design a **clean, extensible backend system**.
+
+Generate code wherever necessary and explain design decisions clearly.
