@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<TeamService>();
         services.AddScoped<MatchService>();
         services.AddScoped<ScoringService>();
+        services.AddScoped<LiveScoringService>();
         services.AddScoped<PlayerService>();
 
         services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();

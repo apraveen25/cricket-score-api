@@ -13,5 +13,7 @@ public record BallDeliveryRequest(
     string? FielderId,
     string? DismissedBatsmanId,
     string? NextBatsmanId,
-    string? NextBowlerId
+    string? NextBowlerId,
+    double? ShotAngle = null,
+    double? ShotDistance = null
 );

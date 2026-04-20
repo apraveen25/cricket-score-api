@@ -25,4 +25,7 @@ public class Delivery
     public string? FielderId { get; set; }
     public string? DismissedBatsmanId { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    public double? ShotAngle { get; set; }
+    public double? ShotDistance { get; set; }
+    public InningsStateSnapshot? PreDeliverySnapshot { get; set; }
 }

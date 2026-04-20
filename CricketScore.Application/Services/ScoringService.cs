@@ -40,7 +40,10 @@ public class ScoringService(
             IsWicket = request.IsWicket,
             WicketType = request.WicketType,
             FielderId = request.FielderId,
-            DismissedBatsmanId = request.DismissedBatsmanId
+            DismissedBatsmanId = request.DismissedBatsmanId,
+            ShotAngle = request.ShotAngle,
+            ShotDistance = request.ShotDistance,
+            PreDeliverySnapshot = TakeSnapshot(innings)
         };
 
         await deliveryRepository.CreateAsync(delivery);
@@ -227,6 +230,35 @@ public class ScoringService(
     {
         return innings.TotalLegalBalls % 6 + 1;
     }
+
+    private static InningsStateSnapshot TakeSnapshot(Innings innings) => new()
+    {
+        TotalRuns = innings.TotalRuns,
+        Wickets = innings.Wickets,
+        TotalLegalBalls = innings.TotalLegalBalls,
+        Extras = innings.Extras,
+        IsCompleted = innings.IsCompleted,
+        CurrentBatsmanId = innings.CurrentBatsmanId,
+        NonStrikeBatsmanId = innings.NonStrikeBatsmanId,
+        CurrentBowlerId = innings.CurrentBowlerId,
+        BattingScores = innings.BattingScores.Select(b => new BatsmanScore
+        {
+            PlayerId = b.PlayerId, PlayerName = b.PlayerName, Runs = b.Runs, Balls = b.Balls,
+            Fours = b.Fours, Sixes = b.Sixes, IsOut = b.IsOut,
+            DismissalDescription = b.DismissalDescription, IsOnStrike = b.IsOnStrike, HasBatted = b.HasBatted
+        }).ToList(),
+        BowlingScores = innings.BowlingScores.Select(b => new BowlerScore
+        {
+            PlayerId = b.PlayerId, PlayerName = b.PlayerName, Overs = b.Overs,
+            BallsInCurrentOver = b.BallsInCurrentOver, Maidens = b.Maidens,
+            Runs = b.Runs, Wickets = b.Wickets, Wides = b.Wides, NoBalls = b.NoBalls
+        }).ToList(),
+        FallOfWickets = innings.FallOfWickets.Select(f => new FallOfWicket
+        {
+            WicketNumber = f.WicketNumber, PlayerId = f.PlayerId, PlayerName = f.PlayerName,
+            RunsAtFall = f.RunsAtFall, Over = f.Over
+        }).ToList()
+    };
 
     private static string FormatOver(int totalLegalBalls)
     {

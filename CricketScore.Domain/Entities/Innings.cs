@@ -63,3 +63,18 @@ public class Innings
     public List<FallOfWicket> FallOfWickets { get; set; } = [];
     public DateTime StartedAt { get; set; } = DateTime.UtcNow;
 }
+
+public class InningsStateSnapshot
+{
+    public int TotalRuns { get; set; }
+    public int Wickets { get; set; }
+    public int TotalLegalBalls { get; set; }
+    public int Extras { get; set; }
+    public bool IsCompleted { get; set; }
+    public string? CurrentBatsmanId { get; set; }
+    public string? NonStrikeBatsmanId { get; set; }
+    public string? CurrentBowlerId { get; set; }
+    public List<BatsmanScore> BattingScores { get; set; } = [];
+    public List<BowlerScore> BowlingScores { get; set; } = [];
+    public List<FallOfWicket> FallOfWickets { get; set; } = [];
+}
