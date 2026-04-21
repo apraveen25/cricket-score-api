@@ -13,10 +13,10 @@ permissions:
   contents: read
 
 env:
-  DOTNET_VERSION: '8.0.x'   # .NET 10 is not GA — use 8 unless you really need preview
-  SOLUTION_PATH: './cricket-score-api.slnx'
-  API_PROJECT_PATH: './CricketScore.API/CricketScore.API.csproj'
-  PUBLISH_OUTPUT: '${{ github.workspace }}/publish'
+  DOTNET_VERSION: "8.0.x" # .NET 10 is not GA — use 8 unless you really need preview
+  SOLUTION_PATH: "./cricket-score-api.slnx"
+  API_PROJECT_PATH: "./CricketScore.API/CricketScore.API.csproj"
+  PUBLISH_OUTPUT: "${{ github.workspace }}/publish"
 
 jobs:
   build:
@@ -74,6 +74,10 @@ jobs:
         with:
           name: cricket-score-api
           path: ${{ env.PUBLISH_OUTPUT }}
+
+      - name: Debug AZURE_CREDENTIALS
+        run: |
+          echo '${{ secrets.AZURE_CREDENTIALS }}' | jq .
 
       # Azure Login (FIXED usage)
       - name: Login to Azure
