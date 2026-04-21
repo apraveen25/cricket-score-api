@@ -14,7 +14,7 @@ permissions:
 
 env:
   DOTNET_VERSION: '8.0.x'   # .NET 10 is not GA — use 8 unless you really need preview
-  SOLUTION_PATH: './cricket-score-api.sln'
+  SOLUTION_PATH: './cricket-score-api.slnx'
   API_PROJECT_PATH: './CricketScore.API/CricketScore.API.csproj'
   PUBLISH_OUTPUT: '${{ github.workspace }}/publish'
 
