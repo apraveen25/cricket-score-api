@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using CricketScore.Application.Exceptions;
 
 namespace CricketScore.API.Middleware;
 
@@ -14,6 +15,10 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
         catch (KeyNotFoundException ex)
         {
             await WriteErrorAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
+        catch (ConflictException ex)
+        {
+            await WriteErrorAsync(context, HttpStatusCode.Conflict, ex.Message);
         }
         catch (UnauthorizedAccessException ex)
         {

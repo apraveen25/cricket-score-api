@@ -13,7 +13,8 @@ public class MappingProfile : Profile
             .ConstructUsing(src => new TeamResponse(
                 src.Id, src.Name, src.ShortName, src.CreatedBy,
                 src.Players.Select(p => new TeamPlayerDto(p.PlayerId, p.Name, p.Role, p.IsCaptain, p.IsWicketKeeper)).ToList(),
-                src.CreatedAt));
+                src.CreatedAt))
+            .ForAllMembers(o => o.Ignore());
 
         CreateMap<Match, MatchResponse>()
             .ConstructUsing(src => new MatchResponse(
@@ -21,6 +22,7 @@ public class MappingProfile : Profile
                 src.Status,
                 src.Toss != null ? new TossResultDto(src.Toss.WinnerTeamId, src.Toss.Decision) : null,
                 src.BattingFirstTeamId, src.CurrentInningsId, src.Venue,
-                src.ScheduledAt, src.CreatedAt));
+                src.ScheduledAt, src.CreatedAt))
+            .ForAllMembers(o => o.Ignore());
     }
 }

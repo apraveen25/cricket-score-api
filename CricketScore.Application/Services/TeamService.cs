@@ -1,12 +1,12 @@
 using AutoMapper;
 using CricketScore.Application.DTOs.Teams;
+using CricketScore.Application.Exceptions;
 using CricketScore.Domain.Entities;
 using CricketScore.Domain.Interfaces.Repositories;
-using CricketScore.Domain.Enums;
 
 namespace CricketScore.Application.Services;
 
-public class TeamService(ITeamRepository teamRepository, IPlayerRepository playerRepository, IMapper mapper)
+public class TeamService(ITeamRepository teamRepository, IMapper mapper)
 {
     public async Task<TeamResponse> CreateTeamAsync(CreateTeamRequest request, string userId)
     {
@@ -40,25 +40,14 @@ public class TeamService(ITeamRepository teamRepository, IPlayerRepository playe
         if (team.Players.Count >= 15)
             throw new InvalidOperationException("Team cannot have more than 15 players.");
 
-        var player = new Player
-        {
-            Name = request.Name,
-            Role = request.Role,
-            BattingStyle = request.BattingStyle,
-            BowlingStyle = request.BowlingStyle,
-            DateOfBirth = request.DateOfBirth,
-            Nationality = request.Nationality,
-            JerseyNumber = request.JerseyNumber,
-            CreatedBy = userId
-        };
-
-        var createdPlayer = await playerRepository.CreateAsync(player);
+        if (team.Players.Any(p => p.PlayerId == request.PlayerId))
+            throw new ConflictException($"Player '{request.Name}' is already in this team.");
 
         var teamPlayer = new TeamPlayer
         {
-            PlayerId = createdPlayer.Id,
-            Name = createdPlayer.Name,
-            Role = createdPlayer.Role,
+            PlayerId = request.PlayerId,
+            Name = request.Name,
+            Role = request.Role,
             IsCaptain = request.IsCaptain,
             IsWicketKeeper = request.IsWicketKeeper
         };
