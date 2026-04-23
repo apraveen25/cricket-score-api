@@ -64,6 +64,12 @@ public class PlayerService(IPlayerRepository playerRepository)
         return players.Select(ToResponse);
     }
 
+    public async Task<IEnumerable<PlayerSuggestionDto>> SearchSuggestionsAsync(string name)
+    {
+        var players = await playerRepository.SearchByNameAsync(name);
+        return players.Select(p => new PlayerSuggestionDto(p.Id, p.Name));
+    }
+
     private static PlayerResponse ToResponse(Player p) => new(
         p.Id, p.Name, p.Role, p.BattingStyle, p.BowlingStyle,
         p.DateOfBirth, p.Nationality, p.JerseyNumber, p.CreatedBy, p.CreatedAt);

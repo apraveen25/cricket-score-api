@@ -52,4 +52,15 @@ public class PlayersController(PlayerService playerService, IValidator<CreatePla
 
         return Ok(players);
     }
+
+    [HttpGet("search")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SearchPlayers([FromQuery] string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return BadRequest("name query parameter is required.");
+
+        var suggestions = await playerService.SearchSuggestionsAsync(name);
+        return Ok(suggestions);
+    }
 }
