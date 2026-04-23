@@ -2,6 +2,7 @@ using AutoMapper;
 using CricketScore.Application.DTOs.Teams;
 using CricketScore.Domain.Entities;
 using CricketScore.Domain.Interfaces.Repositories;
+using CricketScore.Domain.Enums;
 
 namespace CricketScore.Application.Services;
 
@@ -12,6 +13,7 @@ public class TeamService(ITeamRepository teamRepository, IPlayerRepository playe
         var team = new Team
         {
             Name = request.Name,
+            ShortName = request.ShortName,
             CreatedBy = userId
         };
 
@@ -38,17 +40,25 @@ public class TeamService(ITeamRepository teamRepository, IPlayerRepository playe
         if (team.Players.Count >= 15)
             throw new InvalidOperationException("Team cannot have more than 15 players.");
 
-        if (team.Players.Any(p => p.PlayerId == request.PlayerId))
-            throw new InvalidOperationException("Player is already in this team.");
+        var player = new Player
+        {
+            Name = request.Name,
+            Role = request.Role,
+            BattingStyle = request.BattingStyle,
+            BowlingStyle = request.BowlingStyle,
+            DateOfBirth = request.DateOfBirth,
+            Nationality = request.Nationality,
+            JerseyNumber = request.JerseyNumber,
+            CreatedBy = userId
+        };
 
-        var player = await playerRepository.GetByIdAsync(request.PlayerId)
-            ?? throw new KeyNotFoundException($"Player {request.PlayerId} not found.");
+        var createdPlayer = await playerRepository.CreateAsync(player);
 
         var teamPlayer = new TeamPlayer
         {
-            PlayerId = player.Id,
-            Name = player.Name,
-            Role = player.Role,
+            PlayerId = createdPlayer.Id,
+            Name = createdPlayer.Name,
+            Role = createdPlayer.Role,
             IsCaptain = request.IsCaptain,
             IsWicketKeeper = request.IsWicketKeeper
         };

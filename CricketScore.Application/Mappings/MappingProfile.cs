@@ -11,7 +11,7 @@ public class MappingProfile : Profile
     {
         CreateMap<Team, TeamResponse>()
             .ConstructUsing(src => new TeamResponse(
-                src.Id, src.Name, src.CreatedBy,
+                src.Id, src.Name, src.ShortName, src.CreatedBy,
                 src.Players.Select(p => new TeamPlayerDto(p.PlayerId, p.Name, p.Role, p.IsCaptain, p.IsWicketKeeper)).ToList(),
                 src.CreatedAt));
 

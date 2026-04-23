@@ -21,6 +21,7 @@ public class Team
     public string Type { get; set; } = "team";
 
     public string Name { get; set; } = string.Empty;
+    public string ShortName { get; set; } = string.Empty;
     public string CreatedBy { get; set; } = string.Empty;
     public List<TeamPlayer> Players { get; set; } = [];
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

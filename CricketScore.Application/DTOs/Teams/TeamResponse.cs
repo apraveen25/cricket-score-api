@@ -13,6 +13,7 @@ public record TeamPlayerDto(
 public record TeamResponse(
     string Id,
     string Name,
+    string ShortName,
     string CreatedBy,
     List<TeamPlayerDto> Players,
     DateTime CreatedAt
