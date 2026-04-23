@@ -11,7 +11,7 @@ public class CreatePlayerRequestValidator : AbstractValidator<CreatePlayerReques
             .NotEmpty()
             .MaximumLength(100);
 
-        RuleFor(x => x.Role)
+        RuleFor(x => x.PlayerRole)
             .IsInEnum();
 
         RuleFor(x => x.BattingStyle)

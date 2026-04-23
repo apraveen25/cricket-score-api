@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using CricketScore.Application;
 using CricketScore.Infrastructure;
 using CricketScore.Infrastructure.Persistence;
@@ -21,7 +22,8 @@ try
         .ReadFrom.Configuration(ctx.Configuration)
         .WriteTo.Console());
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
     builder.Services.AddSignalR();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>

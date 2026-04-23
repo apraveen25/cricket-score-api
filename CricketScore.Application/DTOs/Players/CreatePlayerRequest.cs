@@ -4,7 +4,7 @@ namespace CricketScore.Application.DTOs.Players;
 
 public record CreatePlayerRequest(
     string Name,
-    PlayerRole Role,
+    PlayerRole PlayerRole,
     BattingStyle BattingStyle,
     BowlingStyle BowlingStyle,
     DateOnly? DateOfBirth = null,

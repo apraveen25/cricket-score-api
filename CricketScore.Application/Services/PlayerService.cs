@@ -11,7 +11,7 @@ public class PlayerService(IPlayerRepository playerRepository)
         var player = new Player
         {
             Name = request.Name,
-            Role = request.Role,
+            Role = request.PlayerRole,
             BattingStyle = request.BattingStyle,
             BowlingStyle = request.BowlingStyle,
             DateOfBirth = request.DateOfBirth,
