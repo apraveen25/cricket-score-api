@@ -3,6 +3,7 @@ using CricketScore.Domain.Enums;
 namespace CricketScore.Application.DTOs.Teams;
 
 public record TeamPlayerDto(
+    int SerialNo,
     string PlayerId,
     string Name,
     PlayerRole Role,

@@ -35,6 +35,27 @@ public class TeamsController(TeamService teamService) : ControllerBase
         return Ok(team);
     }
 
+    [HttpPut("{id}/players/{playerId}")]
+    public async Task<IActionResult> UpdatePlayer(string id, string playerId, [FromBody] UpdateTeamPlayerRequest request)
+    {
+        var team = await teamService.UpdateTeamPlayerAsync(id, playerId, request, UserId);
+        return Ok(team);
+    }
+
+    [HttpDelete("{id}/players/{playerId}")]
+    public async Task<IActionResult> RemovePlayer(string id, string playerId)
+    {
+        var team = await teamService.RemovePlayerAsync(id, playerId, UserId);
+        return Ok(team);
+    }
+
+    [HttpPut("{id}/players/rearrange")]
+    public async Task<IActionResult> RearrangePlayers(string id, [FromBody] RearrangePlayersRequest request)
+    {
+        var team = await teamService.RearrangePlayersAsync(id, request, UserId);
+        return Ok(team);
+    }
+
     [HttpGet("my")]
     public async Task<IActionResult> GetMyTeams()
     {

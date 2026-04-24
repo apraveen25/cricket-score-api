@@ -5,6 +5,7 @@ namespace CricketScore.Domain.Entities;
 
 public class TeamPlayer
 {
+    public int SerialNo { get; set; }
     public string PlayerId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public PlayerRole Role { get; set; }

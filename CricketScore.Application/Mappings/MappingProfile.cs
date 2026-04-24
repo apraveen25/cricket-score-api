@@ -12,7 +12,7 @@ public class MappingProfile : Profile
         CreateMap<Team, TeamResponse>()
             .ConstructUsing(src => new TeamResponse(
                 src.Id, src.Name, src.ShortName, src.CreatedBy,
-                src.Players.Select(p => new TeamPlayerDto(p.PlayerId, p.Name, p.Role, p.IsCaptain, p.IsWicketKeeper)).ToList(),
+                src.Players.OrderBy(p => p.SerialNo).Select(p => new TeamPlayerDto(p.SerialNo, p.PlayerId, p.Name, p.Role, p.IsCaptain, p.IsWicketKeeper)).ToList(),
                 src.CreatedAt))
             .ForAllMembers(o => o.Ignore());
 
