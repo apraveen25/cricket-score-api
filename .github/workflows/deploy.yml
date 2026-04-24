@@ -75,13 +75,26 @@ jobs:
           name: cricket-score-api
           path: ${{ env.PUBLISH_OUTPUT }}
 
+      - name: Extract Azure credentials
+        id: creds
+        run: |
+          CLIENT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.clientId')
+          TENANT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.tenantId')
+          SUBSCRIPTION_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.subscriptionId')
+          CLIENT_SECRET=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.clientSecret')
+          echo "::add-mask::$CLIENT_SECRET"
+          echo "client-id=$CLIENT_ID" >> $GITHUB_OUTPUT
+          echo "tenant-id=$TENANT_ID" >> $GITHUB_OUTPUT
+          echo "subscription-id=$SUBSCRIPTION_ID" >> $GITHUB_OUTPUT
+          echo "client-secret=$CLIENT_SECRET" >> $GITHUB_OUTPUT
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-          tenant-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
-          subscription-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          client-secret: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+          client-id: ${{ steps.creds.outputs.client-id }}
+          tenant-id: ${{ steps.creds.outputs.tenant-id }}
+          subscription-id: ${{ steps.creds.outputs.subscription-id }}
+          client-secret: ${{ steps.creds.outputs.client-secret }}
 
       # Deploy
       - name: Deploy to Azure App Service
