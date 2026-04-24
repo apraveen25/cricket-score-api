@@ -75,15 +75,13 @@ jobs:
           name: cricket-score-api
           path: ${{ env.PUBLISH_OUTPUT }}
 
-      - name: Debug AZURE_CREDENTIALS
-        run: |
-          echo '${{ secrets.AZURE_CREDENTIALS }}' | jq .
-
-      # Azure Login (FIXED usage)
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+          tenant-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+          subscription-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
+          client-secret: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
       # Deploy
       - name: Deploy to Azure App Service
