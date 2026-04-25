@@ -80,6 +80,19 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Allow runner IP on App Service SCM
+        run: |
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          echo "Runner IP: $RUNNER_IP"
+          az webapp config access-restriction add \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ secrets.AZURE_WEBAPP_NAME }} \
+            --rule-name github-actions-deploy \
+            --action Allow \
+            --ip-address "$RUNNER_IP/32" \
+            --priority 100 \
+            --scm-site true
+
       # Deploy
       - name: Deploy to Azure App Service
         id: deploy
@@ -88,11 +101,18 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           package: ${{ env.PUBLISH_OUTPUT }}
 
-      # Optional: output URL
       - name: Show App URL
         run: echo "App deployed successfully"
 
-      # Optional cleanup
+      - name: Remove runner IP from App Service SCM
+        if: always()
+        run: |
+          az webapp config access-restriction remove \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name ${{ secrets.AZURE_WEBAPP_NAME }} \
+            --rule-name github-actions-deploy \
+            --scm-site true || true
+
       - name: Azure logout
         if: always()
         run: az logout
