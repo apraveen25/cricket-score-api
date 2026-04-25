@@ -83,6 +83,7 @@ jobs:
       - name: Allow runner IP on App Service SCM
         run: |
           RUNNER_IP=$(curl -s https://api.ipify.org)
+          echo "Runner IP: $RUNNER_IP"
           az webapp config access-restriction add \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name ${{ secrets.AZURE_WEBAPP_NAME }} \
@@ -91,6 +92,8 @@ jobs:
             --ip-address "$RUNNER_IP/32" \
             --priority 100 \
             --scm-site true
+          echo "Waiting for rule to propagate..."
+          sleep 15
 
       - name: Deploy to Azure App Service
         id: deploy
